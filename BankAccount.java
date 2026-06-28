@@ -75,4 +75,38 @@ public class BankAccount {
         System.out.println("Current Balance: " + balance);
         System.out.println("-----------------------\n");
     }
+
+    /**
+     * Formats account details for persistent file storage.
+     * 
+     * @return CSV formatted string representing the account
+     */
+    public String toFileString() {
+        return accountNumber + "," + accountHolderName + "," + balance;
+    }
+
+    /**
+     * Creates a BankAccount object from a CSV formatted string.
+     * 
+     * @param line CSV line from file
+     * @return BankAccount object or null if parsing fails
+     */
+    public static BankAccount fromFileString(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+        String[] parts = line.split(",");
+        if (parts.length == 3) {
+            try {
+                String accNum = parts[0].trim();
+                String name = parts[1].trim();
+                double bal = Double.parseDouble(parts[2].trim());
+                return new BankAccount(name, accNum, bal);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
 }
+
